@@ -95,11 +95,11 @@ namespace BusinessLogic
             if (name == null || name.Length == 0)
                 name = "SqlMembershipProvider";
 
-            //if (String.IsNullOrEmpty(config["description"]))
-            //{
-            //    config.Remove("description");
-            //    config.AddWithValue("description", "Sample Sql Membership provider");
-            //}
+            if (String.IsNullOrEmpty(config["description"]))
+            {
+                config.Remove("description");
+                config.AddWithValue("description", "Sample Sql Membership provider");
+            }
 
             // Initialize the abstract base class.
             base.Initialize(name, config);
@@ -578,7 +578,7 @@ namespace BusinessLogic
         {
             SqlConnection conn = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand("SELECT Count(*) FROM Users " +
-                                              "WHERE ApplicationName = ?", conn);
+                                              "WHERE ApplicationName = @ApplicationName", conn);
             cmd.Parameters.AddWithValue("@ApplicationName", ApplicationName);
 
             MembershipUserCollection users = new MembershipUserCollection();
@@ -708,7 +708,7 @@ namespace BusinessLogic
 
             SqlConnection conn = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand("SELECT Password, PasswordAnswer, IsLockedOut FROM Users " +
-                  " WHERE Username = @Username AND ApplicationName = ?", conn);
+                  " WHERE Username = @Username AND ApplicationName = @ApplicationName", conn);
 
             cmd.Parameters.AddWithValue("@Username", username);
             cmd.Parameters.AddWithValue("@ApplicationName", pApplicationName);
